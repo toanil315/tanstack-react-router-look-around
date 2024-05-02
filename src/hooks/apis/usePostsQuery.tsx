@@ -6,15 +6,17 @@ export const getPostsQueryOptions = (page?: number, limit?: number) => {
   console.log('limit', limit);
 
   return queryOptions({
-    queryKey: ['posts'],
-    queryFn: () => axiosClient.get('/posts'),
+    queryKey: ['projects'],
+    queryFn: () => axiosClient.get('/projects'),
+    staleTime: 0,
   });
 };
 
 export const usePostsQuery = () => {
   const { data, ...restResult } = useQuery(getPostsQueryOptions());
+
   return {
-    posts: data?.data || [],
+    posts: (data as any)?.results || [],
     ...restResult,
   };
 };

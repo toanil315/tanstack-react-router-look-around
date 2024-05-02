@@ -14,4 +14,5 @@ export const Route = createFileRoute('/_authenticated/posts/')({
   }),
   loader: ({ deps: { page, limit } }) =>
     queryClient.ensureQueryData(getPostsQueryOptions(page, limit)),
+  // In this place we can use beforeLoad to check if the user is authorized to access this page.
 });

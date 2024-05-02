@@ -21,9 +21,9 @@ function Posts() {
               params={{ id: post.id }}
               className='hover:underline'
             >
-              <h2 className='text-lg font-semibold'>{post.title}</h2>
+              <h2 className='text-lg font-semibold'>{post.project_name}</h2>
             </Link>
-            <p>{post.body}</p>
+            <p>{post.project_domain}</p>
           </div>
         ))}
     </div>

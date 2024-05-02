@@ -15,7 +15,7 @@ function LoginComponent() {
 
   const search = Route.useSearch();
 
-  const onFormSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
+  const onFormSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     const data = new FormData(evt.currentTarget);
     const fieldValue = data.get('username');
@@ -24,7 +24,7 @@ function LoginComponent() {
 
     const username = fieldValue.toString();
 
-    auth.login(username);
+    await auth.login(username);
 
     router.invalidate().finally(() => {
       navigate({ to: search.from || fallback });
