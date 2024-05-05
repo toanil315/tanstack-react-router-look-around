@@ -1,5 +1,6 @@
 import { useAuth } from '@/contexts/AuthProvider';
 import { createLazyFileRoute, useRouter, useRouterState } from '@tanstack/react-router';
+import { useEffect } from 'react';
 
 export const Route = createLazyFileRoute('/_auth/login/')({
   component: LoginComponent,
@@ -11,25 +12,24 @@ function LoginComponent() {
   const auth = useAuth();
   const router = useRouter();
   const isLoading = useRouterState({ select: (s) => s.isLoading });
-  const navigate = Route.useNavigate();
-
   const search = Route.useSearch();
 
   const onFormSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     const data = new FormData(evt.currentTarget);
     const fieldValue = data.get('username');
-
     if (!fieldValue) return;
-
     const username = fieldValue.toString();
-
     await auth.login(username);
-
-    router.invalidate().finally(() => {
-      navigate({ to: search.from || fallback });
-    });
   };
+
+  useEffect(() => {
+    if (auth.isAuthenticated) {
+      router.invalidate().finally(() => {
+        router.navigate({ to: search.from || fallback });
+      });
+    }
+  }, [auth.isAuthenticated]);
 
   return (
     <div className='p-2 grid gap-2 place-items-center'>

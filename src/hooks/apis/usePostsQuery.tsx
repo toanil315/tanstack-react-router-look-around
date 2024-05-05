@@ -8,7 +8,6 @@ export const getPostsQueryOptions = (page?: number, limit?: number) => {
   return queryOptions({
     queryKey: ['projects'],
     queryFn: () => axiosClient.get('/projects'),
-    staleTime: 0,
   });
 };
 

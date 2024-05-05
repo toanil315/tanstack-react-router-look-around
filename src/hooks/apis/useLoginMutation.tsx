@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import type { AxiosResponse } from 'axios';
 
 export const useLoginMutation = () => {
-  const { mutate, ...restMutation } = useMutation({
+  const { mutateAsync, ...restMutation } = useMutation({
     mutationFn: () =>
       axiosClient.post('/auth/login', {
         email: 'frontend.exam@digitalfortress.dev',
@@ -13,8 +13,8 @@ export const useLoginMutation = () => {
   });
 
   return {
-    login: async () => {
-      return mutate(undefined, {
+    login: () => {
+      return mutateAsync(undefined, {
         onSuccess(data: AxiosResponse['data']) {
           const { access_token, refresh_token } = data;
           localStorage.setItem(ACCESS_TOKEN, access_token);

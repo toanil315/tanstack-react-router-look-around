@@ -16,6 +16,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as AuthenticatedPostsIndexImport } from './routes/_authenticated/posts/index'
+import { Route as AuthenticatedPostsIdEditIndexImport } from './routes/_authenticated/posts/$id_/edit/index'
 
 // Create Virtual Routes
 
@@ -30,9 +31,6 @@ const AuthenticatedPostsIdRouteLazyImport = createFileRoute(
 )()
 const AuthenticatedPostsIdIndexLazyImport = createFileRoute(
   '/_authenticated/posts/$id/',
-)()
-const AuthenticatedPostsIdEditRouteLazyImport = createFileRoute(
-  '/_authenticated/posts/$id/edit',
 )()
 
 // Create/Update Routes
@@ -103,12 +101,12 @@ const AuthenticatedPostsIdIndexLazyRoute =
     ),
   )
 
-const AuthenticatedPostsIdEditRouteLazyRoute =
-  AuthenticatedPostsIdEditRouteLazyImport.update({
-    path: '/edit',
+const AuthenticatedPostsIdEditIndexRoute =
+  AuthenticatedPostsIdEditIndexImport.update({
+    path: '/edit/',
     getParentRoute: () => AuthenticatedPostsIdRouteLazyRoute,
   } as any).lazy(() =>
-    import('./routes/_authenticated/posts/$id_/edit/route.lazy').then(
+    import('./routes/_authenticated/posts/$id_/edit/index.lazy').then(
       (d) => d.Route,
     ),
   )
@@ -149,12 +147,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignUpIndexLazyImport
       parentRoute: typeof AuthImport
     }
-    '/_authenticated/posts/$id/edit': {
-      preLoaderRoute: typeof AuthenticatedPostsIdEditRouteLazyImport
-      parentRoute: typeof AuthenticatedPostsIdRouteLazyImport
-    }
     '/_authenticated/posts/$id/': {
       preLoaderRoute: typeof AuthenticatedPostsIdIndexLazyImport
+      parentRoute: typeof AuthenticatedPostsIdRouteLazyImport
+    }
+    '/_authenticated/posts/$id/edit/': {
+      preLoaderRoute: typeof AuthenticatedPostsIdEditIndexImport
       parentRoute: typeof AuthenticatedPostsIdRouteLazyImport
     }
   }
@@ -167,8 +165,8 @@ export const routeTree = rootRoute.addChildren([
   AuthenticatedRoute.addChildren([
     AuthenticatedPostsRouteLazyRoute.addChildren([
       AuthenticatedPostsIdRouteLazyRoute.addChildren([
-        AuthenticatedPostsIdEditRouteLazyRoute,
         AuthenticatedPostsIdIndexLazyRoute,
+        AuthenticatedPostsIdEditIndexRoute,
       ]),
       AuthenticatedPostsIndexRoute,
     ]),
